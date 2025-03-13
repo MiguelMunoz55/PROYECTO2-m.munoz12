@@ -25,6 +25,28 @@ def dashboard():
         ingredientes=ingredientes
     )
 
+# Ruta para vender un producto
+@admin_blueprint.route("/vender-producto/<int:producto_id>", methods=["POST"])
+@login_required
+def vender_producto_route(producto_id):
+    if not current_user.es_admin:
+        return "Acceso denegado", 403
+
+    producto = Producto.query.get_or_404(producto_id)
+    
+    try:
+        mensaje = producto.consumir_ingredientes()
+        db.session.commit()
+        flash(mensaje, "success")
+    except ValueError as e:
+        db.session.rollback()
+        flash(f"¡Oh no! Nos hemos quedado sin {e}", "danger")
+    except Exception as e:
+        db.session.rollback()
+        flash("Ocurrió un error inesperado al intentar vender el producto.", "danger")
+    
+    return redirect(url_for("admin.dashboard"))
+
 # Ruta para cargar ingredientes
 @admin_blueprint.route("/cargar-ingredientes", methods=["POST"])
 @login_required
@@ -34,8 +56,10 @@ def cargar_ingredientes_route():
 
     try:
         cargar_ingredientes()
+        flash("Ingredientes cargados correctamente", "success")
     except Exception as e:
         db.session.rollback()
+        flash(f"Error al cargar ingredientes: {str(e)}", "danger")
         
     return redirect(url_for("admin.dashboard"))
 
@@ -48,7 +72,9 @@ def cargar_productos_route():
 
     try:
         cargar_productos()
+        flash("Productos cargados correctamente", "success")
     except Exception as e:
         db.session.rollback()
+        flash(f"Error al cargar productos: {str(e)}", "danger")
         
     return redirect(url_for("admin.dashboard"))

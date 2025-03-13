@@ -25,7 +25,11 @@ class Producto(db.Model):
         return self.inventario > 0
 
     def consumir_ingredientes(self):
-        if self.inventario > 0:
-            self.inventario -= 1
-        else:
-            raise ValueError("No hay inventario disponible")
+        ingredientes = [self.ingrediente_1, self.ingrediente_2, self.ingrediente_3]
+
+        for ingrediente in ingredientes:
+            if ingrediente and not ingrediente.consumir_ingredientes():
+                raise ValueError(ingrediente.nombre)
+        
+        self.inventario -= 1
+        return "¡Vendido!"
