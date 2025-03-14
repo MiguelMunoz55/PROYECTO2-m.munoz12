@@ -1,0 +1,16 @@
+Buen dia , 
+El repositorio del proyecto se encuentra acá :
+https://github.com/MiguelMunoz55/PROYECTO2-m.munoz12
+
+1. Se debe crear la base de datos
+2. Ejecutar el app.py (Ahi se crea las tablas de ingredientes, productos y usuarios)
+3. Se debe loggear y ya en la vista del admin sale la opcion de cargar ingredientes , y cargar productos
+4. Desde esa vista se puede vender
+5. Las pruebas unitarias estan en la carpeta de test
+
+De una vez le pusé la parte de la autenticación.
+Afuera de la carpeta app, esta la pagina de insertar usuarios.py
+
+
+
+

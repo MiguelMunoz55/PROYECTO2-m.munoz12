@@ -56,7 +56,6 @@ def cargar_ingredientes_route():
 
     try:
         cargar_ingredientes()
-        flash("Ingredientes cargados correctamente", "success")
     except Exception as e:
         db.session.rollback()
         flash(f"Error al cargar ingredientes: {str(e)}", "danger")
@@ -70,9 +69,14 @@ def cargar_productos_route():
     if not current_user.es_admin:
         return "Acceso denegado", 403
 
+    # Verificar si hay ingredientes antes de cargar productos
+    ingredientes = Ingrediente.query.all()
+    if not ingredientes:
+        flash("Primero debes cargar los ingredientes antes de agregar productos.", "warning")
+        return redirect(url_for("admin.dashboard"))
+
     try:
         cargar_productos()
-        flash("Productos cargados correctamente", "success")
     except Exception as e:
         db.session.rollback()
         flash(f"Error al cargar productos: {str(e)}", "danger")
